@@ -1,5 +1,6 @@
 ---
 title: "IODS course project"
+author: "practising123"
 output:
   html_document:
     theme: cosmo
@@ -9,6 +10,7 @@ output:
     fig_width: 6
     fig_height: 4
     code_folding: hide
+    
 ---
 
 ***
