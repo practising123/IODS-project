@@ -1,10 +1,4 @@
-# Insert chapter 2 title here
-
-*Describe the work you have done this week and summarize your learning.*
-
-- Describe your work and results clearly. 
-- Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods
-- Assume the reader has no previous knowledge of your data or the more advanced methods you are using  
+# Chapter 2
 
 - did the wrangling part + dataCamp exercises.
 Wrangling code:
@@ -92,8 +86,6 @@ summary(my_model)
 
 my_model <- lm(Points ~ Attitude, data = new_table)
 summary(my_model)
-plot(my_model, which =c(1))
-#
 
 ```
 2.5
