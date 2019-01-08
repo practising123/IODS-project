@@ -3,3 +3,4 @@
 
 Introduction to Open Data Science 2018 is a Massive Online Open Course(Mooc) which teaches the basics of data science, tools needed (like GitHub and RStudio) and languages like R. Course teaches about the amount, importance and possibilities of data. Course highlights open data and open source free software. This is a link to my GitHub repository: https://github.com/practising123/IODS-project 
 
+
