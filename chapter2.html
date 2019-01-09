@@ -190,8 +190,11 @@ $(document).ready(function () {
 <div id="chapter-2" class="section level1">
 <h1>Chapter 2</h1>
 <ul>
-<li>Did the dataCamp exercises. Wrangling code:</li>
+<li>Did the dataCamp exercises.</li>
 </ul>
+</div>
+<div id="wrangling-code" class="section level1">
+<h1>Wrangling code:</h1>
 <pre class="r"><code>library(dplyr)
 library(ggplot2)
 library(GGally)
@@ -320,9 +323,7 @@ dim(new_table)</code></pre>
 </div>
 <div id="analysis" class="section level1">
 <h1>Analysis</h1>
-</div>
-<div id="section" class="section level1">
-<h1>2.1</h1>
+<p>2.1</p>
 <pre class="r"><code>new_table &lt;- read.table(file = &quot;data/learning2014.txt&quot;, header=TRUE)
 summary(new_table)</code></pre>
 <pre><code>##  gender       Age           Attitude         Points           deep      
@@ -345,9 +346,7 @@ summary(new_table)</code></pre>
 <li>Deep, stra and surf are means of multiple questions measuring these subjects.</li>
 <li>Points is exam points.</li>
 </ul>
-</div>
-<div id="section-1" class="section level1">
-<h1>2.2</h1>
+<p>2.2</p>
 <pre class="r"><code>summary(new_table)</code></pre>
 <pre><code>##  gender       Age           Attitude         Points           deep      
 ##  F:110   Min.   :17.00   Min.   :14.00   Min.   : 7.00   Min.   :1.583  
@@ -386,9 +385,7 @@ p</code></pre>
 <li>Shows that male have better attitude on statistics then female.</li>
 <li><p>Biggest correlations are between points and attitude 0.437 and stra 0.146.</p></li>
 </ul>
-</div>
-<div id="section-2" class="section level1">
-<h1>2.3</h1>
+<p>2.3</p>
 <pre class="r"><code>my_model &lt;- lm(Points ~ Attitude + stra + surf, data = new_table)
 summary(my_model)</code></pre>
 <pre><code>## 
@@ -417,9 +414,7 @@ summary(my_model)</code></pre>
 <li>Dropping stra and surf because those are not relevant.</li>
 </ul>
 <pre class="r"><code>my_model &lt;- lm(Points ~ Attitude, data = new_table)</code></pre>
-</div>
-<div id="section-3" class="section level1">
-<h1>2.4</h1>
+<p>2.4</p>
 <pre class="r"><code>summary(my_model)</code></pre>
 <pre><code>## 
 ## Call:
@@ -462,11 +457,8 @@ summary(my_model)</code></pre>
 ## Residual standard error: 5.32 on 164 degrees of freedom
 ## Multiple R-squared:  0.1906, Adjusted R-squared:  0.1856 
 ## F-statistic: 38.61 on 1 and 164 DF,  p-value: 4.119e-09</code></pre>
-</div>
-<div id="section-4" class="section level1">
-<h1>2.5</h1>
+<p>2.5 - Assumptions of linear regression models:</p>
 <ul>
-<li><p>Assumptions of linear regression models:</p></li>
 <li><p>The errors are normally distributed</p></li>
 <li><p>The errors are not correlated</p></li>
 <li><p>The errors have constant variance</p></li>

@@ -1,7 +1,8 @@
 # Chapter 2
 
 - Did the  dataCamp exercises.
-Wrangling code:
+
+#Wrangling code:
 ```{r,dpi = 200, message=FALSE}
 library(dplyr)
 library(ggplot2)
@@ -63,7 +64,7 @@ str(new_table)
 - Saving and loading from /data
 
 #Analysis
-#2.1
+2.1
 
 ```{r,dpi = 200, message=FALSE}
 
@@ -75,7 +76,7 @@ summary(new_table)
 - Deep, stra and surf are means of multiple questions measuring these subjects. 
 - Points is exam points.
 
-#2.2
+2.2
 ```{r,dpi = 200, message=FALSE}
 summary(new_table)
 
@@ -100,7 +101,7 @@ table(new_table$gender, cut(new_table$Attitude, breaks = seq(1,56,by=5)))
 
 ```{r,dpi = 200, message=FALSE}
 ```
-#2.3
+2.3
 ```{r,dpi = 200, message=FALSE}
 
 
@@ -115,7 +116,7 @@ summary(my_model)
 
 my_model <- lm(Points ~ Attitude, data = new_table)
 ```
-#2.4
+2.4
 ```{r,dpi = 200, message=FALSE}
 summary(my_model)
 ```
@@ -127,7 +128,7 @@ my_model <- lm(Points ~ Attitude, data = new_table)
 summary(my_model)
 
 ```
-#2.5
+2.5
 - Assumptions of linear regression models:
 
 - The errors are normally distributed
