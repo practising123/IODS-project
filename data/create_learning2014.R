@@ -1,6 +1,7 @@
 #practising123
 #5.1.19
 #First wrangling excercise.
+install.packages("rlang")
 install.packages("dplyr")
 install.packages("GGally")
 install.packages('ggplot2', dep = TRUE)
@@ -92,3 +93,5 @@ plot(my_model, which =c(1))
 plot(my_model, which =c(1))
 plot(my_model, which =c(2))
 plot(my_model, which =c(5))
+
+
