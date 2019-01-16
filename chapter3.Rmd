@@ -69,9 +69,9 @@ ggpairs(alc, columns = vars, mapping = aes(alpha = 0.3), lower = list(combo = wr
 ```
 - From summary we can see that absences and sex are significant variables, G3 is just slightly significant and Pstatus is not at all.
 -There are 198 females and 184 male on the data set. propability for a female to be high user is 0.35 and 0.57 for male, so hypothesis was right. From cbind(OR, CI) we can see that odds for men high use are 2.7 times higher then for female. 
-- Absence is significant. With each point in absence the odd for high_use grows 1.07. ggplot g1 shows that if high use is true, it´s more likely that there are more absences as well. 
+- Absence is significant. With each point in absence the odd for high_use grows 1.07. ggplot g1 shows that if high use is true, itÂ´s more likely that there are more absences as well. 
 
--Pstatus worked differently then expected: in 38 situations parents lived apart and there´s 0.37 propability that student is high user. In situation where families lived together (364), 160 students reported high use, which is propability of 0.44, which is significantly higher. It has to be noted that there was so few famielies living apart that this is not definitive.
+-Pstatus worked differently then expected: in 38 situations parents lived apart and thereÂ´s 0.37 propability that student is high user. In situation where families lived together (364), 160 students reported high use, which is propability of 0.44, which is significantly higher. It has to be noted that there was so few famielies living apart that this is not definitive.
 - from G3 plot we can see that the propability for high use decreases as G3 rises. With one point raise in G3, the odds for high alcohol use decrease by 0.92.
 
 2.5
@@ -141,7 +141,7 @@ loss_func(class = alc$high_use, prob = alc$probability)
 
 
 ```
-The training error is 0.35, so it´s worse then the one in dataCamp exercises.
+The training error is 0.35, so itÂ´s worse then the one in dataCamp exercises.
 
 Bonus:
 ```{r,dpi = 200, message=FALSE}
