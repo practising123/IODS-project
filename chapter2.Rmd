@@ -1,4 +1,4 @@
-# Chapter 2
+# Chapter 2 - Regression and model validation
 
 - Did the  dataCamp exercises.
 
@@ -28,14 +28,13 @@ strategic_columns <- select(lrn14, one_of(strategic_questions))
 stra <- rowMeans(strategic_columns)
 ```
 
-- Taking means of courses to create new combination variables
+- Taking courses(in deep, strategic...) and counting their means to create new combination variables.
 
 ```{r,dpi = 200, message=FALSE}
 
 keep_columns <- c("gender","Age","Attitude", "Points")
 learning2014 <- select(lrn14, one_of(keep_columns))
 ```
-
 - Decide columns to take and retrieve all of them to "learning2014"
 - Choosing the columns, creating new data frame learning2014 for analyzing.
 
@@ -48,8 +47,7 @@ learning2014 <-filter(learning2014, Points>0)
 str(learning2014)
 dim(learning2014)
 ```
-
-- Insert compilation variables and filtering zero-pointers.
+- Insert compilation variables and filtering zero-pointers. Now we have Learning table with keep columns and combination columns.
 
 ```{r,dpi = 200, message=FALSE}
 
@@ -78,8 +76,6 @@ summary(new_table)
 
 2.2
 ```{r,dpi = 200, message=FALSE}
-summary(new_table)
-
 
 p <- ggpairs(new_table, mapping = aes(col=gender, alpha=0.3), lower = list(combo = wrap("facethist", bins = 20)))
 p
@@ -91,25 +87,20 @@ table(new_table$gender, cut(new_table$Attitude, breaks = seq(1,56,by=5)))
 
 ```
 - Notes on data:
-
 - Only 56/166 are men.
-
+- Biggest correlations are between points and attitude 0.437 and negative correlation between deep and surg -0.324. This is because of males -0.622 correlation, female got only -0.087.
 - Most of the students are between 15 and 25 years, on the youngest category. Mean is bigger then median so the distribution of age is skewed to the left.
-
-- Shows that male have better attitude on statistics then female.
-- Biggest correlations are between points and attitude 0.437 and stra 0.146.
+- Shows that male have better attitude in general on statistics then female.
 
 ```{r,dpi = 200, message=FALSE}
 ```
 2.3
 ```{r,dpi = 200, message=FALSE}
-
-
 my_model <- lm(Points ~ Attitude + stra + surf, data = new_table)
 summary(my_model)
 
 ```
-- Apparently Attitude having .34 regression to points is significant, attitude has ***
+- Attitude having 0.34 regression to points is significant, attitude has ***
 - Multiple R-squared:  0.21 and 0.34 regression.
 - Dropping stra and surf because those are not relevant.
 ```{r,dpi = 200, message=FALSE}
@@ -120,7 +111,7 @@ my_model <- lm(Points ~ Attitude, data = new_table)
 ```{r,dpi = 200, message=FALSE}
 summary(my_model)
 ```
-- Multiple R-squared:  0.19 and 0.35 regression. predictors explain 19% of variance. 1 point in attitude raises exam points by 3.53 on average.
+- Multiple R-squared:  0.19 and 0.35 regression. predictors explain 19% of variance. 1 point in attitude raises exam points by 0.353 on average.
 ```{r,dpi = 200, message=FALSE}
 
 
@@ -142,7 +133,7 @@ summary(my_model)
 ```{r,dpi = 200, message=FALSE}
 plot(my_model, which =c(1))
 ```
-- Residual vs fitted. Tells if there are patterns. patterns mean problem with the assumption. if there would be bigger residual on bigger values, the assumption(my_model) would need to be corrected.Residuals seem to be scattered evenly(variance seems constant). 
+- Residual vs fitted. Tells if there are patterns, patterns mean problem with the assumption. If there would be bigger residual on bigger values, the assumption(my_model) would need to be corrected. Residuals seem to be scattered evenly(variance seems constant). 
 ```{r,dpi = 200, message=FALSE}
 
 plot(my_model, which =c(2))
@@ -152,4 +143,4 @@ plot(my_model, which =c(2))
 
 plot(my_model, which =c(5))
 ```
-- Tells if there are influentical cases in the model. if there are cases on topor bottom right, those would strongly influence the results.
+- Tells if there are influentical cases in the model. if there are cases on top right or bottom right, those would strongly influence the results.

@@ -1,0 +1,298 @@
+---
+title: "Chapter4"
+author: "practising123"
+date: "24 tammikuuta 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Analysis
+4.1.
+```{r}
+library(MASS)
+library(dplyr)
+library(GGally)
+library(ggplot2)
+library(tidyverse)
+
+library(corrplot)
+
+bhv <- Boston
+str(bhv)
+dim(bhv)
+View(bhv)
+
+```
+ The data is about housing values in suburbs of Boston and table has 14 variables and 506 observations. THe variables:
+< code >crim
+per capita crime rate by town.
+< code >zn
+proportion of residential land zoned for lots over 25,000 sq.ft.
+< code >indus
+proportion of non-retail business acres per town.
+< code >chas
+Charles River dummy variable (= 1 if tract bounds river; 0 otherwise).
+< code >nox
+nitrogen oxides concentration (parts per 10 million).
+< code >rm
+average number of rooms per dwelling.
+< code >age
+proportion of owner-occupied units built prior to 1940.
+< code >dis
+weighted mean of distances to five Boston employment centres.
+< code >rad
+index of accessibility to radial highways.
+< code >tax
+full-value property-tax rate per \$10,000.
+< code >ptratio
+pupil-teacher ratio by town.
+< code >black
+1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town.
+< code >lstat
+lower status of the population (percent).
+< code >medv
+median value of owner-occupied homes in \$1000s.
+
+Lets change the variable names to more understandable ones.
+```{r,dpi = 200, message=FALSE}
+
+new_names <- c("crime_rate","proposion_residental_land", "proportion_industrial", "river_bound", "Nitrogen_concentration", "rooms_per_house", "proportion_old_houses","distance_emplyment_center", "access_highways","tax_value", "pupil_teacher_ratio", "proportion_blacks", "lower_status", "house_values")
+names(bhv) <-new_names
+summary(bhv)
+
+ggpairs(bhv, columns = 1:14, mapping = aes(alpha = 0.3), lower = list(combo = wrap("facethist")))
+
+cor_matrix <- cor(Boston)
+cor_matrix_rounded<-cor(bhv) %>% round(2)
+
+corrplot(cor_matrix, method="number", type = "upper", cl.pos = "b", tl.pos = "a", tl.cex = 0.6)
+
+```  
+
+-We dont know how the propotion of blacks is counted but from summary we can see that it큦 heavily left skewed, minimum is 0.32, 1st qu 375.38 and Mean 356.67. This implies that there are few areas that have extremely small percentage of black people.
+-Crime rate seems to changing a lot, min is 0.00632, median 0.25651 and max 88.97620! So in some places 1000 people get caught/prosecuted from crimes 6.32 times, in the median area it큦 256.51 times and the maximum is 88976.20? So every citizen would make 89 crimes? I guess that can't be right so im assuming this cant be directly read as amount of crimes. So according the data in some suburbs per capita there is 14000 times more crime then in others. In the correlation matrix we can see that the variables that correlate most are access to highways 0.6255 and tax value 0.5827.
+- Tax value correlates strongly with access to highways 0.9102 and propotion industrial 0.7207
+-House values correlate with lower status -0.74
+ and 0.70 on rooms per house.
+
+
+
+```{r}
+res1 <- cor.mtest(Boston, conf.level = .95)
+corrplot(cor_matrix, p.mat = res1$p, method = "color", type = "upper",
+         sig.level = c(.001, .01, .05), pch.cex = .9,
+         insig = "label_sig", pch.col = "white", order = "AOE")
+asd <- c(bhv$access_highways==24)
+asb <- c(bhv$tax_value==666)
+length(which(asb))
+length(which(asd))
+sum(asd,na.rm=T)
+```  
+- Almost all of the correlations are significant even on .001 level.
+-there seems to be 132 entries with 666 taxvalue and 24 average rooms, propably left empty or something. propotion industrial and pupil teacher ratios also have these.
+
+4.2
+Standardize the dataset and print out summaries of the scaled data. How did the variables change? Create a categorical variable of the crime rate in the Boston dataset (from the scaled crime rate). Use the quantiles as the break points in the categorical variable. Drop the old crime rate variable from the dataset. Divide the dataset to train and test sets, so that 80% of the data belongs to the train set.
+```{r}
+bhv_scaled <- scale(bhv)
+summary(bhv_scaled)
+class(bhv_scaled)
+bhv_scaled=as.data.frame(bhv_scaled)
+
+```
+-bhv_scaled was matrix so it큦 turned into data frame.
+-Scaling substracts the mean of the column from each row, and then divides the difference with standard deviation. What we get is that all the variables are on similar scale. 
+- Scaling is necessary for the later linear discriminant analysis, because it assumes the variables are normally distributed and each variable has same variance. 
+
+```{r}
+bins <- quantile(bhv_scaled$crime_rate)
+bins
+
+```
+- Makes quantiles, median is -0.3902. 25% is -0,4105 and 75% 0,0073, so between these to error is 50% of the suburbs in data. breaks = 4 had to be changed to "bins"
+```{r}
+
+labels <- c("low", "med_low", "med_high", "high")
+crime_rate <- cut(bhv_scaled$crime_rate, breaks =bins, include.lowest = TRUE, label = labels)
+table(crime_rate)
+bhv_scaled <- dplyr::select(bhv_scaled, -crime_rate)
+bhv_scaled <- data.frame(crime_rate, bhv_scaled)
+
+```
+-Tells how many people are in which group. 
+- dropped the old criminal rate as the first column.
+- Dividing the data to test and train data 20/80%.The training of the model is done with the train set and prediction on new data is done with the test set. This way you have true classes / labels for the test data, and you can calculate how well the model performed in prediction. 
+```{r}
+# number of rows in the Boston dataset 
+n <- nrow(bhv_scaled)
+
+# choose randomly 80% of the rows
+ind <- sample(n,  size = n * 0.8)
+
+# create train set
+train <- bhv_scaled[ind,]
+
+# create test set 
+test <- bhv_scaled[-ind,]
+
+# save the correct classes from test data
+correct_classes <- test$crime
+# remove the crime variable from test data
+test <- dplyr::select(test, -crime_rate)
+```
+4.5
+LDA is used to predict classes for new data and to find variables that either discriminate or separate the classes best (DataCamp). The difference between classification and clustering is, that in classification the classes are known and the model is trained with the training set from the data, and it classifies new values into classes. Clustering, on the other hand, means that the classes are unknown, but the data is grouped based on the similarities of the observations. If the assumptions of discriminant analysis are met, it is more powerful than logistic regression, but the assumptions are rarely met. 
+```{r}
+lda.fit <- lda(crime_rate ~ ., data = train)
+# print the lda.fit object
+lda.fit
+# the function for lda biplot arrows
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+# target classes as numeric
+classes <- as.numeric(train$crime_rate)
+# plot the lda results
+plot(lda.fit, dimen = 2,col = classes, pch = classes)
+lda.arrows(lda.fit, myscale = 7)
+# or like this: plot(lda.fit, dimen = 2,col = classes, pch = classes) + lda.arrows(lda.fit, myscale = 7)
+```
+- these have to be run similarily in RMarkdown, maybe because when you call arrow it removes above lda and there is nowhere to draw the lines. 
+
+4.6
+Save the crime categories from the test set and then remove the categorical crime variable from the test dataset. Then predict the classes with the LDA model on the test data. Cross tabulate the results with the crime categories from the test set. Comment on the results. 
+
+Next phase is to fit the testing data to the LDA and predict the classes for the values. Since the correct values are stoder in the *correct_classes* variable, I will cross-tabulate the predicted values and the correct values to see whether the classifier classified the values correctly. 
+```{r}
+# predict classes with test data
+lda.pred <- predict(lda.fit, newdata = test)
+
+# cross tabulate the results
+table(correct = correct_classes, predicted = lda.pred$class)
+table(correct = correct_classes)
+table(predicted = lda.pred$class)
+```
+-Model seems to predict crime rate reasonably well. 
+- High rates are all correct. 
+- Half of the actual med. highs are predicted as med.low. 
+- From actual med. low half wornd, divded on low and med. high. 
+- On actual low, model tends puts more than hald on med. low and one on med.high so it큦 not effective on predicting low crime rates.
+
+4.7
+Reload and standardize Boston data set. Scale the variables to get comparable distances
+```{r}
+data("Boston")
+b_scaled <- scale(Boston)
+names(b_scaled) <-new_names
+b_scaled <- as.data.frame(b_scaled)
+# euclidean distance matrix
+dist_eu <- dist(b_scaled)
+
+summary(dist_eu)
+
+# manhattan distance matrix
+dist_man <- dist(b_scaled, method = "manhattan")
+
+# look at the summary of the distances
+summary(dist_man)
+
+
+set.seed(123)
+# determining the number of clusters
+k_max <- 10
+
+# calculate the total within sum of squares
+twcss <- sapply(1:k_max, function(k){kmeans(b_scaled, k)$tot.withinss})
+
+# visualize the results
+qplot(x = 1:k_max, y = twcss, geom = 'line')
+
+# k-means clustering, 2 is the steepest corner so we pick 2 clusters.
+km <-kmeans(b_scaled, centers = 2)
+
+# plot the Boston dataset with clusters
+pairs(b_scaled, col = km$cluster)
+
+#Error in plot.new() : figure margins too large,  give the command on console.
+pairs(b_scaled[1:10], col = km$cluster)
+
+```
+- Data is spread into two clusters that are quite differerent from eachother. We can see from the graph what we earlier saw numerically from the datatable. In the upper row we have crime against the variables, and we can see that cluster #2 has higher crime rates in every aspect than cluster #1.
+
+Bonus:
+```{r}
+data(Boston)
+b_scaled <- scale(Boston)
+names(b_scaled) <-new_names
+b_scaled <- as.data.frame(b_scaled)
+
+km <- kmeans(b_scaled, centers = 3)
+km
+```
+- clustering the data into 3 groups.
+```{r}
+lda.fit <- lda(km$cluster~., data=b_scaled)
+classes<-as.numeric(km$cluster)
+
+plot(lda.fit, dimen = 2, col=classes)
+lda.arrows(lda.fit, myscale = 4)
+```
+drawing the clusters and arrows. here we can see which variables are meaningful to which cluster.
+
+Bonus #2
+```{r}
+data("Boston")
+b_scaled <- scale(Boston)
+b_scaled <- as.data.frame(b_scaled)
+set.seed(123)  #Setting seed
+bins <- quantile(b_scaled$crim)
+# create a categorical variable 'crime'
+crime <- cut(b_scaled$crim, breaks = bins, include.lowest = TRUE, label=c("low","med_low","med_high","high"))
+# look at the table of the new factor crime
+#table(crime)
+# remove original crim from the dataset
+b_scaled <- dplyr::select(b_scaled, -crim)
+# add the new categorical value to scaled data
+b_scaled <- data.frame(b_scaled, crime)
+# number of rows in the Boston dataset 
+n <- nrow(b_scaled)
+# choose randomly 80% of the rows
+ind <- sample(n,  size = n * 0.8)
+# create train set
+train <- b_scaled[ind,]
+# create test set 
+test <- b_scaled[-ind,]
+lda.fit <- lda(crime ~ ., data = train)
+model_predictors <- dplyr::select(train, -crime)
+# check the dimensions
+dim(model_predictors)
+dim(lda.fit$scaling)
+# matrix multiplication
+matrix_product <- as.matrix(model_predictors) %*% lda.fit$scaling
+matrix_product <- as.data.frame(matrix_product)
+library(plotly)
+plot_ly(x = matrix_product$LD1, y = matrix_product$LD2, z = matrix_product$LD3, type= 'scatter3d', mode='markers')
+set.seed(123)
+data("Boston")
+boston_scaled <- scale(Boston)
+boston_scaled <- as.data.frame(boston_scaled)
+myset <- boston_scaled[ind,]
+km <-kmeans(myset, centers = 2)
+plot_ly(x = matrix_product$LD1, y = matrix_product$LD2, z = matrix_product$LD3, type= 'scatter3d', mode='markers', color = km$cluster)
+
+
+```
+
+
+
+
+
+
+

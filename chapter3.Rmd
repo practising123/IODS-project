@@ -5,9 +5,9 @@ date: "16 tammikuuta 2019"
 output: html_document
 ---
 
-# Chapter 3
+# Chapter 3 - Logistic regression
 
-- Did the  dataCamp exercises.
+- Did the dataCamp exercises.
 
 3.1 & 3.2
 ```{r,dpi = 200, message=FALSE}
@@ -30,7 +30,7 @@ In addition:
 3.3
 The 4 hypothesis and interesting varibles I chose to explore are: 
 absences, My guess is that more absences from school would lead to higher alcohol use because of lower grades and "rebellious" nature of the person.
-sex, hypothesis is that male will frink heavier than female.
+sex, hypothesis is that male will drink heavier than female.
 pstatus, hypothesis is that child of a divorced parents is more likely to be high user.
 G3(final grade) hypothesis is that high users are likely to get lower final score than low users.
 3.4
@@ -47,9 +47,9 @@ alc %>% group_by(high_use, sex) %>% summarise(count = n())
 alc %>% group_by( Pstatus, high_use) %>% summarise(count = n())
 
 alc %>% group_by(G3, high_use) %>% summarise(count = n())
-g1 <- ggplot(alc, aes(x = high_use, y = absences))
+g1 <- ggplot(alc, aes(x = high_use, y = absences, col=sex))
 g1 + geom_boxplot() + ggtitle("Student absences by alcohol consumption and sex")
-g2 <- ggplot(alc, aes(x = high_use, y = G3))
+g2 <- ggplot(alc, aes(x = high_use, y = G3, col=sex))
 g2 + geom_boxplot()
 
 m <- glm(high_use ~ absences + sex + Pstatus + G3, data = alc, family = "binomial")
@@ -67,11 +67,16 @@ ggpairs(alc, columns = vars, mapping = aes(alpha = 0.3), lower = list(combo = wr
 
 
 ```
-- From summary we can see that absences and sex are significant variables, G3 is just slightly significant and Pstatus is not at all.
--There are 198 females and 184 male on the data set. propability for a female to be high user is 0.35 and 0.57 for male, so hypothesis was right. From cbind(OR, CI) we can see that odds for men high use are 2.7 times higher then for female. 
-- Absence is significant. With each point in absence the odd for high_use grows 1.07. ggplot g1 shows that if high use is true, itÂ´s more likely that there are more absences as well. 
+- Bocplot show that for males high use is more related to g3 point, for female highuse doesnt really effect.
 
--Pstatus worked differently then expected: in 38 situations parents lived apart and thereÂ´s 0.37 propability that student is high user. In situation where families lived together (364), 160 students reported high use, which is propability of 0.44, which is significantly higher. It has to be noted that there was so few famielies living apart that this is not definitive.
+- From summary we can see that absences and sex are significant variables, G3 is just slightly significant and Pstatus is not at all.
+
+-There are 198 females and 184 male on the data set. propability for a female to be high user is 0.35 and 0.57 for male, so hypothesis was right. From cbind(OR, CI) we can see that odds for men high use are 2.7 times higher then for female. 
+
+- Absence is significant. With each point in absence the odd for high_use grows 1.07. ggplot g1 shows that if high use is true, it´s more likely that there are more absences as well. 
+
+-Pstatus worked differently then expected: in 38 situations parents lived apart and there´s 0.37 propability that student is high user. In situation where families lived together (364), 160 students reported high use, which is propability of 0.44, which is significantly higher. It has to be noted that there was so few famielies living apart that this is not definitive.
+
 - from G3 plot we can see that the propability for high use decreases as G3 rises. With one point raise in G3, the odds for high alcohol use decrease by 0.92.
 
 2.5
@@ -90,8 +95,11 @@ cbind(OR, CI)
 
 ```
 Pstatus was dropped since it was not significant. in the new model:
+
 -Each point in absences raises the odds for 1.08. for 95% of the students one absence point raises high use risk between 1.03 & 1.13.
+
 - In sex its 2.7 times more likely for male to be high user than female. for 95% of the students the coefficients have an effect of 1.76-4.15
+
 - Each point in G3 decreases the risk for high use for 1-0.92. for 95% of the students the one point decreases between 0.86 and 0.98.
 
 3.6
@@ -141,7 +149,7 @@ loss_func(class = alc$high_use, prob = alc$probability)
 
 
 ```
-The training error is 0.35, so itÂ´s worse then the one in dataCamp exercises.
+The training error is 0.34, so it´s worse then the one in dataCamp exercises.
 
 Bonus:
 ```{r,dpi = 200, message=FALSE}

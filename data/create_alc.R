@@ -5,10 +5,10 @@
 library(dplyr)
 library(ggplot2)
 library(GGally)
-
+install.packages("plotly")
 mat <- read.table("data/student-mat.csv",sep = ";", header=TRUE)
 por <- read.csv("data/student-por.csv", sep = ";", header=TRUE)
-summary(mat)
+summary(mat)h
 dim(mat)
 str(mat)
 summary(por)
