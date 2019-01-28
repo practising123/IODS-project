@@ -1,5 +1,5 @@
 ---
-title: "Chapter4"
+title: "chapter4"
 author: "practising123"
 date: "24 tammikuuta 2019"
 output: html_document
@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+Chapter 4 - Clustering and classification
 Analysis
 4.1.
 ```{r}
