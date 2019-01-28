@@ -1,9 +1,9 @@
 ---
-title: "Chapter3"
+title: "chapter3"
 author: "practising123"
 date: "16 tammikuuta 2019"
 output: html_document
-encoding: UTF-8
+
 ---
 
 
@@ -12,7 +12,7 @@ encoding: UTF-8
 - Did the dataCamp exercises.
 
 3.1 & 3.2
-```{r,dpi = 200, message=FALSE}
+```{r}
 
 library(GGally)
 library(dplyr)
@@ -37,7 +37,7 @@ pstatus, hypothesis is that child of a divorced parents is more likely to be hig
 G3(final grade) hypothesis is that high users are likely to get lower final score than low users.
 3.4
 
-```{r,dpi = 200, message=FALSE}
+```{r}
 
 
 gather(alc) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar()
@@ -69,7 +69,7 @@ ggpairs(alc, columns = vars, mapping = aes(alpha = 0.3), lower = list(combo = wr
 
 
 ```
-- Bocplot show that for males high use is more related to g3 point, for female highuse doesnt really effect.
+- Boxplot show that for males high use is more related to g3 point, for female highuse doesnt really effect.
 
 - From summary we can see that absences and sex are significant variables, G3 is just slightly significant and Pstatus is not at all.
 
@@ -83,7 +83,7 @@ ggpairs(alc, columns = vars, mapping = aes(alpha = 0.3), lower = list(combo = wr
 
 2.5
 Pstatus is not significant so it will be dropped.
-```{r,dpi = 200, message=FALSE}
+```{r}
 m <- glm(high_use ~ absences + sex + Pstatus + G3, data = alc, family = "binomial")
 
 m <- glm(high_use ~ absences + sex + G3, data = alc, family = "binomial")
@@ -106,7 +106,7 @@ Pstatus was dropped since it was not significant. in the new model:
 
 3.6
 
-```{r,dpi = 200, message=FALSE}
+```{r}
 m <- glm(high_use ~ absences + Pstatus + sex + G3, data = alc, family = "binomial")
 probabilities <- predict(m, type = "response")
 alc <- mutate(alc, probability = probabilities)
@@ -127,7 +127,7 @@ I will add failures to model to see what happens
 
 
 
-```{r,dpi = 200, message=FALSE}
+```{r}
 m <- glm(high_use ~ absences + failures + sex + G3, data = alc, family = "binomial")
 probabilities <- predict(m, type = "response")
 alc <- mutate(alc, probability = probabilities)
@@ -142,7 +142,7 @@ high_use is the same 0.54 for false and 46 for true. so this model is worse then
 
 define a loss function (mean prediction error)/proportion of inaccurately classified individuals (= the training error): 
 
-```{r,dpi = 200, message=FALSE}
+```{r}
 loss_func <- function(class, prob) {
   n_wrong <- abs(class - prob) > 0.5
   mean(n_wrong)
@@ -154,7 +154,7 @@ loss_func(class = alc$high_use, prob = alc$probability)
 The training error is 0.34, so it´s worse then the one in dataCamp exercises.
 
 Bonus:
-```{r,dpi = 200, message=FALSE}
+```{r}
 
 
 
