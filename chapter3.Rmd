@@ -82,10 +82,10 @@ ggpairs(alc, columns = vars, mapping = aes(alpha = 0.3), lower = list(combo = wr
 - from G3 plot we can see that the propability for high use decreases as G3 rises. With one point raise in G3, the odds for high alcohol use decrease by 0.92.
 
 2.5
-
+Pstatus is not significant so it will be dropped.
 ```{r,dpi = 200, message=FALSE}
 m <- glm(high_use ~ absences + sex + Pstatus + G3, data = alc, family = "binomial")
-#Pstatus is not significant so it will be dropped.
+
 m <- glm(high_use ~ absences + sex + G3, data = alc, family = "binomial")
 summary(m)
 coef(m)

@@ -337,9 +337,9 @@ ggpairs(alc, columns = vars, mapping = aes(alpha = 0.3), lower = list(combo = wr
 <ul>
 <li>from G3 plot we can see that the propability for high use decreases as G3 rises. With one point raise in G3, the odds for high alcohol use decrease by 0.92.</li>
 </ul>
-<p>2.5</p>
+<p>2.5 Pstatus is not significant so it will be dropped.</p>
 <pre class="r"><code>m &lt;- glm(high_use ~ absences + sex + Pstatus + G3, data = alc, family = &quot;binomial&quot;)
-#Pstatus is not significant so it will be dropped.
+
 m &lt;- glm(high_use ~ absences + sex + G3, data = alc, family = &quot;binomial&quot;)
 summary(m)</code></pre>
 <pre><code>## 
@@ -463,7 +463,7 @@ loss_func(class = alc$high_use, prob = alc$probability)</code></pre>
 <pre class="r"><code>library(boot)
 cv &lt;- cv.glm(data = alc, cost = loss_func, glmfit = m, K = 10)
 cv$delta[1]</code></pre>
-<pre><code>## [1] 0.3534031</code></pre>
+<pre><code>## [1] 0.3612565</code></pre>
 </div>
 
 
