@@ -3,7 +3,9 @@ title: "Chapter3"
 author: "practising123"
 date: "16 tammikuuta 2019"
 output: html_document
+encoding: UTF-8
 ---
+
 
 # Chapter 3 - Logistic regression
 
