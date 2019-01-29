@@ -1,10 +1,4 @@
----
-title: "chapter3"
-author: "practising123"
-date: "16 tammikuuta 2019"
-output: html_document
 
----
 
 
 # Chapter 3 - Logistic regression

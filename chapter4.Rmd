@@ -1,10 +1,3 @@
----
-title: "chapter4"
-author: "practising123"
-date: "24 tammikuuta 2019"
-output: html_document
----
-
 
 Chapter 4 - Clustering and classification
 Analysis
